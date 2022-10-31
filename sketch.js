@@ -1,12 +1,12 @@
 //variaveis da bolinha 
 let xBolinha = 300; //criar variavel para bolinha
 let yBolinha = 200; //criar variavel para bolinha
-let diametroBolinha = 15; //criar variavel para bolinha
+let diametroBolinha = 12; //criar variavel para bolinha
 let raio = diametroBolinha / 2 //criar variavel para coledir na ponta, e não no centro então somamos mais o raio 
 
 //variaveis da velocidade da bolinha 
-let velocidadexBolinha = 4; //criar variavel para bolinha andar
-let velocidadeyBolinha = 4; //criar variavel para bolinha andar
+let velocidadexBolinha = 6; //criar variavel para bolinha andar
+let velocidadeyBolinha = 6; //criar variavel para bolinha andar
 
 //variaveis da raquete
 let xRaquete = 5;
@@ -17,8 +17,6 @@ let alturaRaquete = 90;
 //variaveis da raquete oponente
 let xRaqueteOponente = 585;
 let yRaqueteOponente = 150;
-let velocidadeyOponente; //criar variavel da velocidade do oponente
-let velocidadexOponente; //criar variavel da velocidade do oponente
 
 //Variavel pontos do jogo
 let meusPontos = 0;
@@ -26,8 +24,15 @@ let oponentesPontos = 0;
 
 let colidiu = false;
 
+//sons do jogo
+let raquetada; //criar variaveis para puxar o som do jogo
+let ponto;
+let trilha;
+
+
 function setup() { //tamanho do funco
   createCanvas(600, 400);
+  trilha.loop(); // para dar play na variavel trilha que é da musica se quiser ficar tocando sempre seria loop
 }
 function draw(){
   background(0) //cor do quadrado fundo
@@ -56,6 +61,7 @@ function movimentaBolinha(){
 function verificaborda(){
   if( xBolinha + raio > width|| xBolinha - raio < 0 ){ //se a bolinha tocar no limete ela recebe o valor *-1 isso vai dar negativo e vai voltar
     velocidadexBolinha *=-1;
+    ponto.play();
   }
   if( yBolinha + raio > height || yBolinha - raio < 0 ){ //se a bolinha tocar no limete ela recebe o valor *-1 isso vai dar negativo e vai voltar
     velocidadeyBolinha *= -1
@@ -76,21 +82,35 @@ function movimentaMinhaRaquete (){
 }
 
   function movimentaRaqueteOponente(){
-    velocidadeyOponente = yBolinha - yRaqueteOponente - larguraRaquete / 2 - 30;
-    yRaqueteOponente += velocidadeyOponente;
+    if (keyIsDown(87)){ //o valor da posição da raquete recebe -10 para subir
+      yRaqueteOponente -=10;
+    }
+    if (keyIsDown(83)){
+      yRaqueteOponente +=10; //o valor da posição da raquete recebe +10 para descer
+    }
 }
 
 function verificarcolisaodaRaquete(x, y) {
   colidiu = collideRectCircle(x, y, larguraRaquete, alturaRaquete, xBolinha, yBolinha, raio);
   if (colidiu) {
     velocidadexBolinha *= -1;
+    raquetada.play(); // verifica se colidiu, se sim ela vai emitir o som
   }
 }
 
 function incluirPlacar(){
+  stroke(255); // contorno na cor branca da caixa de placar
+  textAlign(CENTER); // todos os texto centralizado
+  textSize(16);//aumentar tamanho do placar
+
+  fill(color(255, 140, 0)); //pintar caixinha dos pontos de laranja
+  rect(130,10,40,20); //criar minha caixinha de pontos do jogo
+  rect(430,10,40,20); //criar caixinha do oponente pontos do jogo
+
   fill(255); //pintar os pontos na cor branca
-  text(meusPontos, 200, 26); //impromir meus pontos nessa posição
-  text(oponentesPontos, 400, 26); //impromir meus pontos nessa posição
+  text(meusPontos, 150, 26); //impromir meus pontos nessa posição
+  fill(255); //pintar os pontos na cor branca
+  text(oponentesPontos, 450, 26); //impromir meus pontos nessa posição
 }
 
 function marcaPntos(){
@@ -102,28 +122,8 @@ function marcaPntos(){
   }
 }
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function preload(){ //função que está recebendo o son do jogo e passando para as variaveis criadas no começo do codigo (loadSound = carrega som)
+  trilha = loadSound("trilha.mp3");
+  raquetada = loadSound ("raquetada.mp3");
+  ponto = loadSound ("ponto.mp3");
+}
