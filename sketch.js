@@ -81,13 +81,18 @@ function movimentaMinhaRaquete (){
   }
 }
 
-  function movimentaRaqueteOponente(){
-    if (keyIsDown(87)){ //o valor da posição da raquete recebe -10 para subir
-      yRaqueteOponente -=10;
-    }
-    if (keyIsDown(83)){
-      yRaqueteOponente +=10; //o valor da posição da raquete recebe +10 para descer
-    }
+//   function movimentaRaqueteOponente(){
+//     if (keyIsDown(87)){ //o valor da posição da raquete recebe -10 para subir
+//       yRaqueteOponente -=10;
+//     }
+//     if (keyIsDown(83)){
+//       yRaqueteOponente +=10; //o valor da posição da raquete recebe +10 para descer
+//     }
+// }
+
+function movimentaRaqueteOponente(){
+  velocidadeyOponente = yBolinha - yRaqueteOponente - larguraRaquete / 2 - 30;
+  yRaqueteOponente += velocidadeyOponente;
 }
 
 function verificarcolisaodaRaquete(x, y) {
